@@ -1,4 +1,4 @@
-use image::{ ImageBuffer, Rgb, RgbImage};
+use image::{ImageBuffer, Rgb, RgbImage};
 use rand::Rng;
 use std::fs::Metadata;
 use std::path::Path;
@@ -6,11 +6,19 @@ use std::{env, fs, process};
 
 fn main() {
     let all_arguments: Vec<String> = env::args().collect();
-    if all_arguments.len() < 2 {
-        println!("You must provide absolute path to Godot project.");
-        process::exit(1);
+    let godot_project;
+    if all_arguments.len() >= 2 {
+        godot_project = all_arguments[1].clone();
+    } else {
+        godot_project = match env::current_dir() {
+            Ok(t) => t.to_string_lossy().to_string(),
+            Err(_) => {
+                println!("Cannot get current directory.");
+                process::exit(1);
+            }
+        };
     }
-    let godot_project = all_arguments[1].trim_end_matches('/').to_string() + "/";
+    let godot_project = godot_project.trim_end_matches('/').to_string() + "/";
 
     if !Path::new(&godot_project).is_dir() {
         println!("{} isn't proper directory.", all_arguments[1]);
@@ -64,7 +72,7 @@ fn main() {
                 if !file_name.ends_with(".png") && !file_name.ends_with(".jpg") {
                     continue;
                 }
-                let mut image_file: RgbImage = ImageBuffer::new(1,1);
+                let mut image_file: RgbImage = ImageBuffer::new(1, 1);
                 // let old_img = match image::open(&file_name) {
                 //     Ok(t) => t,
                 //     Err(_) => {
@@ -92,7 +100,6 @@ fn main() {
                 for pixel in image_file.pixels_mut() {
                     *pixel = color;
                 }
-
 
                 match image_file.save(&file_name) {
                     Ok(_) => (),
