@@ -7,6 +7,14 @@ It is helpful e.g. in testing project with help of Valgrind or sanitizers becaus
 ```
 godot_image_replacer /home/rafal/Project/tps-demo
 ```
+or 
+```
+cd godot_project
+godot_image_replacer
+```
+
+### Warning
+Make sure that you have backup of your images and/or committed changes to git.
 
 ### License
 MIT
